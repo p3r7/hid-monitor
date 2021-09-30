@@ -204,11 +204,11 @@ function clear_hid_buffer()
 end
 
 function hid_type_name()
-  if hid_device.is_ascii_keyboard then
+  if hid_device.device.is_ascii_keyboard then
     return "keyboard"
-  elseif hid_device.is_mouse then
+  elseif hid_device.device.is_mouse then
     return "mouse"
-  elseif hid_device.is_gamepad then
+  elseif hid_device.device.is_gamepad then
     return "gamepad"
   else
     return "???"
