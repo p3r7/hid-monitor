@@ -12,6 +12,8 @@
 
 local hid_events = require "hid_events"
 
+local ANALOG_O_MARGIN = 5
+
 local devicepos = 1
 local hdevs = {}
 local hid_device
@@ -219,8 +221,7 @@ function is_loggable_event(event_code_type,val)
 end
 
 function is_dpad_origin(value)
-  local margin = 5
-  return ( value >= (128 - margin) and value <= (128 + margin) )
+  return ( value >= (128 - ANALOG_O_MARGIN) and value <= (128 + ANALOG_O_MARGIN) )
 end
 
 function code_2_keycode(event_code_type, code)
