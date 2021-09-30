@@ -27,8 +27,8 @@ local line_offset = 16
 local col1 = 0
 local col2 = 10
 local col3 = 30
-local col4 = col3 + 22
-local col5 = col4 + 22
+local col4 = col3 + 27
+local col5 = col4 + 20
 
 
 -- ------------------------------------------------------------------------
@@ -151,7 +151,7 @@ function hid_event(typ, code, value)
     -- if keycode then
     --   dbg_msg = dbg_msg .."\t".. " keycode: "..keycode
     -- end
-    msg = {typ, string.sub(event_code_type, -3), code, value, shorten_keycode(keycode)}
+    msg = {typ, string.sub(event_code_type, -3), int_to_hex(code), value, shorten_keycode(keycode)}
     table.insert(hid_buffer, 1, msg)
   end
 
@@ -238,7 +238,7 @@ function shorten_keycode(keycode)
 end
 
 -- ------------------------------------------------------------------------
--- HELPER FNS - DRAW
+-- HELPER FNS - STR
 
 function truncate_txt(txt, size)
   if string.len(txt) > size then
@@ -251,13 +251,25 @@ function truncate_txt(txt, size)
   return s
 end
 
+function int_to_hex(v)
+  local hex = string.format("%X", v)
+  if string.len(hex) == 1 then
+    hex = '0'..hex
+  end
+  return '0x'..hex
+end
+
+
+-- ------------------------------------------------------------------------
+-- HELPER FNS - DRAWING
+
 function draw_labels()
   screen.level(1)
   screen.move(col1,(line_height * 2))
   screen.text('')
   screen.move(col2 - 7,(line_height * 2))
   screen.text('event')
-  screen.move(col3 + 1,(line_height * 2))
+  screen.move(col3 + 2,(line_height * 2))
   screen.text('code')
   screen.move(col4, (line_height * 2))
   screen.text('val')
