@@ -207,8 +207,15 @@ end
 -- HELPER FNS - HID EVENTS
 
 function is_loggable_event(event_code_type,val)
-  return ( (event_code_type == "EV_KEY" and val == 1)
-    or (event_code_type == "EV_ABS" and not is_dpad_origin(val)) )
+  if event_code_type == "EV_KEY" and val == 0 then
+    return false
+  end
+
+  if event_code_type == "EV_ABS" and is_dpad_origin(val) then
+    return false
+  end
+
+  return true
 end
 
 function is_dpad_origin(value)
