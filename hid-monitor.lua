@@ -26,9 +26,9 @@ local line_height = 8
 local line_offset = 16
 local col1 = 0
 local col2 = 10
-local col3 = 45
-local col4 = col3 + 25
-local col5 = col4 + 25
+local col3 = 30
+local col4 = col3 + 22
+local col5 = col4 + 22
 
 
 -- ------------------------------------------------------------------------
@@ -85,17 +85,6 @@ function redraw()
   screen.text(hid_type_name()) -- FIXME: not working as expected
   screen.stroke()
 
-  -- if blinkers[1] and clocking then
-  --   screen.level(12)
-  --   screen.rect(124, 3, 4, 4)
-  --   screen.fill()
-  --   -- screen.pixel(112, 6)
-  -- else
-  --   screen.level(1)
-  --   screen.rect(124, 3, 4, 4)
-  --   screen.fill()
-  -- end
-
   screen.level(1)
   screen.line_width(1.5)
   screen.move(0, 18)
@@ -150,7 +139,6 @@ function hid_event(typ, code, value)
     end
   end
 
-
   local do_log_event = is_loggable_event(event_code_type, value)
 
   if do_log_event then
@@ -159,11 +147,11 @@ function hid_event(typ, code, value)
     if keycode == nil then
       keycode = ""
     end
-    -- msg = "hid.event" .."\t".. " type: "..typ .."\t".. " code: ".. code .."\t".. " value: "..value
+    -- dbg_msg = "hid.event" .."\t".. " type: "..typ .."\t".. " code: ".. code .."\t".. " value: "..value
     -- if keycode then
-    --   msg = msg .."\t".. " keycode: "..keycode
+    --   dbg_msg = dbg_msg .."\t".. " keycode: "..keycode
     -- end
-    msg = {typ, event_code_type, code, value, keycode}
+    msg = {typ, string.sub(event_code_type, -3), code, value, shorten_keycode(keycode)}
     table.insert(hid_buffer, 1, msg)
   end
 
@@ -219,9 +207,8 @@ end
 -- HELPER FNS - HID EVENTS
 
 function is_loggable_event(event_code_type,val)
-  return val ~= nil
-    and ( (event_code_type == "EV_KEY" and val == 1)
-      or (event_code_type == "EV_ABS" and not is_dpad_origin(val)) )
+  return ( (event_code_type == "EV_KEY" and val == 1)
+    or (event_code_type == "EV_ABS" and not is_dpad_origin(val)) )
 end
 
 function is_dpad_origin(value)
@@ -243,9 +230,12 @@ function event_code_type_2_key_prfx(event_code_type)
   return string.sub(event_code_type, -3)
 end
 
--- function shorten_keycode(keycode)
---   local v = string.match(keycode, "$")
--- end
+function shorten_keycode(keycode)
+  if util.string_starts(keycode, 'KEY_') then
+    return string.sub(keycode, string.len('KEY_')+1)
+  end
+  return keycode
+end
 
 -- ------------------------------------------------------------------------
 -- HELPER FNS - DRAW
@@ -264,13 +254,13 @@ end
 function draw_labels()
   screen.level(1)
   screen.move(col1,(line_height * 2))
-  screen.text('t')
-  screen.move(col2,(line_height * 2))
+  screen.text('')
+  screen.move(col2 - 7,(line_height * 2))
   screen.text('event')
-  screen.move(col3,(line_height * 2))
+  screen.move(col3 + 1,(line_height * 2))
   screen.text('code')
-  screen.move(col4,(line_height * 2))
-  screen.text('value')
+  screen.move(col4, (line_height * 2))
+  screen.text('val')
   screen.move(col5,(line_height * 2))
   screen.text('keycode')
   -- screen.move(col6,(line_height * 2))
