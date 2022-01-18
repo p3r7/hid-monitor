@@ -229,7 +229,7 @@ function code_2_keycode(event_code_type, code)
     if tonumber(v) == code then
       if event_code_type == 'EV_KEY' and (util.string_starts(k, 'KEY_') or util.string_starts(k, 'BTN_')) then
         return k
-      elseif util.string_starts(k, gamepad.event_code_type_2_key_prfx(event_code_type)) then
+      elseif util.string_starts(k, event_code_type_2_key_prfx(event_code_type)) then
         return k
       end
     end
