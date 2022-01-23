@@ -194,7 +194,9 @@ function clear_hid_buffer()
 end
 
 function hid_type_name()
-  if hid_device.device.is_ascii_keyboard then
+  if hid_device == nil or hid_device.device == nil then
+    return "none"
+  elseif hid_device.device.is_ascii_keyboard then
     return "keyboard"
   elseif hid_device.device.is_mouse then
     return "mouse"
